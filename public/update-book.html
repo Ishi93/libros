@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actualizar Libro</title>
+</head>
+<body>
+    <h1>Actualizar Libro</h1>
+    <form id="updateBookForm">
+        <input type="hidden" id="bookId" name="bookId" value="">
+        Título: <input type="text" id="title" name="title"><br>
+        Autor: <input type="text" id="author" name="author"><br>
+        Año de Publicación: <input type="number" id="publicationYear" name="publicationYear"><br>
+        Género: <input type="text" id="genre" name="genre"><br>
+        <button type="button" onclick="saveChanges()">Guardar Cambios</button>
+    </form>
+    <script>
+        // Recuperar el ID del libro de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('id');
+        if (bookId) {
+            // Rellenar el formulario con los detalles del libro actual
+            fetch(`/api/books/${bookId}`)
+                .then(response => response.json())
+                .then(book => {
+                    document.getElementById('bookId').value = book._id;
+                    document.getElementById('title').value = book.title;
+                    document.getElementById('author').value = book.author;
+                    document.getElementById('publicationYear').value = book.publicationYear;
+                    document.getElementById('genre').value = book.genre;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function saveChanges() {
+            const bookId = document.getElementById('bookId').value;
+            const updatedBook = {
+                title: document.getElementById('title').value,
+                author: document.getElementById('author').value,
+                publicationYear: document.getElementById('publicationYear').value,
+                genre: document.getElementById('genre').value,
+            };
+            
+            // Hacer una solicitud PUT a la API para actualizar el libro
+            fetch(`/api/books/${bookId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedBook),
+            })
+            .then(response => response.json())
+            .then(() => {
+                alert('Libro actualizado correctamente.');
+                // Redirigir al usuario a la lista de libros u otra página si es necesario.
+                window.location.href = '/book-list.html';
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Libros</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"> 
+</head>
+<body>
+    <h1>Lista de Libros</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Año de Publicación</th>
+                <th>Género</th>
+                <th>Acciones</th> 
+            </tr>
+        </thead>
+        <tbody>
+            <script>
+                fetch('/api/books')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('tbody');
+
+                        data.forEach(book => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${book.title}</td>
+                                <td>${book.author}</td>
+                                <td>${book.publicationYear}</td>
+                                <td>${book.genre}</td>
+                                <td>
+                                    <button onclick="updateBook('${book._id}')">Actualizar</button>
+                                    <button onclick="deleteBook('${book._id}')">Eliminar</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            </script>
+        </tbody>
+    </table>
+    <script>
+        function updateBook(bookId) {
+            // Redirigir al usuario a la página de actualización con el ID del libro.
+            window.location.href = `/update-book.html?id=${bookId}`;
+        }
+        
+        function deleteBook(bookId) {
+    // Mostrar una confirmación al usuario antes de eliminar el libro.
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar este libro?');
+    if (confirmDelete) {
+        // Hacer una solicitud DELETE a la API de libros.
+        fetch(`/api/books/${bookId}`, {
+            method: 'DELETE',
+        })
+        .then(response => {
+            if (response.status === 204) {
+                alert('Libro eliminado correctamente.');
+                // Recargar la página o redirigir al usuario a otra página si es necesario.
+            } else {
+                alert('Error al eliminar el libro.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
+
+
+    </script>
+</body>
+</html>

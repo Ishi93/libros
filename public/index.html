@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Inicio</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+    <h1>Bienvenido a la Biblioteca</h1>
+    <form action="/api/books" method="post">
+        <h2>Crear un nuevo libro:</h2>
+        Título: <input type="text" name="title"><br>
+        Autor: <input type="text" name="author"><br>
+        Año de Publicación: <input type="number" name="publicationYear"><br>
+        Género: <input type="text" name="genre"><br>
+        <button type="submit">Agregar</button>
+    </form>
+    <br>
+    <a href="/book-list.html">Ver lista de libros</a><br>
+    <a href="/book-details.html">Ver detalles de un libro</a><br>
+</body>
+</html>
